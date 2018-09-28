@@ -25,17 +25,18 @@ def TSserver():
     print("[TS]: got host by name: %s" %tsSoc.gethostbyname(host))
     print("[TS]: got host by addr: ", tsSoc.gethostbyaddr(host))
     socketServer.listen(1)
-    print("\n[TS]: Listening for one connection...")
+    print("\n[TS]: Listening for one connection on port 5000...")
 
-    ctsd, addr = socketServer.accept()
+    clientSocket, addr = socketServer.accept()
     print("[TS]: Accepted!\n")
     
     print()
 
-    print("What if we are waiting to receive anything but client doesn't do anything?")
-
     # Receive data that client is sending over
-    clientReq = ctsd.recv(1024).decode('utf-8')
+    clientReq = clientSocket.recv(1024).decode('utf-8')
+    print("[TS]: Request received: ", clientReq)
+    clientSocket.send("TSserver here".encode('utf-8'))
+    
 
     """
     if clientReq in ts_table:
@@ -45,7 +46,7 @@ def TSserver():
     
     ctsd.send(entry)
     """
-    print("[TS]: ctsd is: %s" %ctsd)
+    print("[TS]: clientSocket is: %s" %clientSocket)
     print("[TS]: addr is: ", addr)
 
     socketServer.close()

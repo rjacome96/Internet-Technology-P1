@@ -12,10 +12,13 @@ def RSserver():
     port = 6000
     serverBinding = ('', port)
     socketServer.bind(serverBinding)
-    print("Socket is binded to port: ", port )
+    print("[RS]Socket is binded to port: ", port )
 
     socketServer.listen(1)
-    clientSocket = socketServer.accept()
+    print("[RS]: Listening for one connection on port 6000...")
+    clientSocket, addr = socketServer.accept()
+
+    print("[RS]: Request found: ", clientSocket.recv(1024).decode('utf-8'))
 
     clientSocket.send("RS Server here".encode('utf-8'))
     

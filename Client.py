@@ -15,19 +15,26 @@ def connectClient():
     tsSocketConnection = (myAddr, tsPort)
 
     rsPort = 6000
-    rsSocketConnection2 = (myAddr, rsPort)
+    rsSocketConnection = (myAddr, rsPort)
 
     host = aSocket.gethostname()
-    print("[TS]: got host name: %s" %host)
-    print("[TS]: got host by name: %s" %aSocket.gethostbyname(host))
-    print("[TS]: got host by addr: ", aSocket.gethostbyaddr(host))
+    print("[C]: got host name: %s" %host)
+    print("[C]: got host by name: %s" %aSocket.gethostbyname(host))
+    print("[C]: got host by addr: ", aSocket.gethostbyaddr(host))
 
-    rsClientSocket.connect(tsSocketConnection)
+    rsClientSocket.connect(rsSocketConnection)
+    tsClientSocket.connect(tsSocketConnection)
+
+    rsClientSocket.send("Search HOSTNAME".encode('utf-8'))
+    tsClientSocket.send("Search HOSTNAME".encode('utf-8'))
+
+    print("[C]: Message received: ", rsClientSocket.recv(1024).decode('utf-8'))
+    print("[C]: Message received: ", tsClientSocket.recv(1024).decode('utf-8'))
 
 
-    rsClientSocket.send("Hey bro!".encode('utf-8'))
-
+    tsClientSocket.shutdown(aSocket.SHUT_RDWR)
     rsClientSocket.shutdown(aSocket.SHUT_RDWR)
+    tsClientSocket.close()
     rsClientSocket.close()
 
 
