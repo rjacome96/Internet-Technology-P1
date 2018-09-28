@@ -1,1 +1,3 @@
-DNSERS TEST
+e.yahoo.com 128.48.35.6 A
+x.google.com 19.2.3.4 A
+ilab2.cs.rutgers.edu - NS

@@ -1,1 +1,2 @@
-DNSTS TEST
+e.standford.edu 128.48.35.4 A
+x.google.edu 19.2.3.8 A

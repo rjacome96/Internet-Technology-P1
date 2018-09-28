@@ -24,7 +24,7 @@ def connectClient():
 
 
     rsClientSocket.connect(rsSocketConnection)
-    tsClientSocket.connect(tsSocketConnection)
+    #tsClientSocket.connect(tsSocketConnection)
 
     with open("PROJ1-HNS.txt", "r") as readFile:
         with open("RESOLVED.txt", "w") as writeFile:
@@ -32,16 +32,16 @@ def connectClient():
                 # Stripping the new line at the end MIGHT mess with comparing strings but will need to be testes
                 print("[C]: Hostname to look up: ", hostName.rstrip())
                 # First contact to RS server
-                rsClientSocket.send("Search HOSTNAME".encode('utf-8'))
-                tsClientSocket.send("Search HOSTNAME".encode('utf-8'))
+                rsClientSocket.send(hostName.rstrip().encode('utf-8'))
+                #tsClientSocket.send("Search HOSTNAME".encode('utf-8'))
 
                 print("[C]: Message received: ", rsClientSocket.recv(1024).decode('utf-8'))
-                print("[C]: Message received: ", tsClientSocket.recv(1024).decode('utf-8'))
+                #print("[C]: Message received: ", tsClientSocket.recv(1024).decode('utf-8'))
 
 
-    tsClientSocket.shutdown(aSocket.SHUT_RDWR)
+    #tsClientSocket.shutdown(aSocket.SHUT_RDWR)
     rsClientSocket.shutdown(aSocket.SHUT_RDWR)
-    tsClientSocket.close()
+    #tsClientSocket.close()
     rsClientSocket.close()
 
 

@@ -11,6 +11,7 @@ def TSserver():
 
     with open("PROJ1-DNSTS.txt", "r") as dnsTabelFile:
         for fieldLine in dnsTabelFile:
+            dictKey = fieldLine.rstrip()
             print("[TS]: Fieldline: ", fieldLine)
     
     # determine local hostname, IP address , select a port number
