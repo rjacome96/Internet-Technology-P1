@@ -8,6 +8,10 @@ def TSserver():
         print("[TS]: socket server created")
     except tsSoc.error as err:
         print('{} \n'.format("socket open error ", err))
+
+    with open("PROJ1-DNSTS.txt", "r") as dnsTabelFile:
+        for fieldLine in dnsTabelFile:
+            print("[TS]: Fieldline: ", fieldLine)
     
     # determine local hostname, IP address , select a port number
     host = tsSoc.gethostname()
@@ -32,10 +36,14 @@ def TSserver():
     
     print()
 
-    # Receive data that client is sending over
-    clientReq = clientSocket.recv(1024).decode('utf-8')
-    print("[TS]: Request received: ", clientReq)
-    clientSocket.send("TSserver here".encode('utf-8'))
+    while True:
+
+        clientSocket.send("TSserver here".encode('utf-8'))
+        # Receive data that client is sending over
+        clientReq = clientSocket.recv(1024).decode('utf-8')
+        print("[TS]: Request received: ", clientReq)
+        if not clientReq:
+            break
     
 
     """

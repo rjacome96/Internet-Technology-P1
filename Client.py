@@ -25,11 +25,15 @@ def connectClient():
     rsClientSocket.connect(rsSocketConnection)
     tsClientSocket.connect(tsSocketConnection)
 
-    rsClientSocket.send("Search HOSTNAME".encode('utf-8'))
-    tsClientSocket.send("Search HOSTNAME".encode('utf-8'))
+    with open("PROJ1-HNS.txt", "r") as readFile:
+        with open("RESOLVED.txt", "w") as writeFile:
+            for hostName in readFile:
+                print("[C]: Hostname to look up: ", hostName)
+                rsClientSocket.send("Search HOSTNAME".encode('utf-8'))
+                tsClientSocket.send("Search HOSTNAME".encode('utf-8'))
 
-    print("[C]: Message received: ", rsClientSocket.recv(1024).decode('utf-8'))
-    print("[C]: Message received: ", tsClientSocket.recv(1024).decode('utf-8'))
+                print("[C]: Message received: ", rsClientSocket.recv(1024).decode('utf-8'))
+                print("[C]: Message received: ", tsClientSocket.recv(1024).decode('utf-8'))
 
 
     tsClientSocket.shutdown(aSocket.SHUT_RDWR)
