@@ -41,19 +41,20 @@ def TSserver():
         clientSocket.send("TSserver here".encode('utf-8'))
         # Receive data that client is sending over
         clientReq = clientSocket.recv(1024).decode('utf-8')
-        print("[TS]: Request received: ", clientReq)
         if not clientReq:
             break
-    
+        print("[TS]: Request received: ", clientReq)
 
-    """
-    if clientReq in ts_table:
-        entry = TS_table(clientReq)
-    else:
-        entry = "hname" + "Error: Host not found"
-    
-    ctsd.send(entry)
-    """
+        
+        """
+        if clientReq in ts_table:
+            entry = TS_table(clientReq)
+        else:
+            entry = "hname" + "Error: Host not found"
+        
+        ctsd.send(entry)
+        break
+        """
     print("[TS]: clientSocket is: %s" %clientSocket)
     print("[TS]: addr is: ", addr)
 

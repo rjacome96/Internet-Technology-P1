@@ -22,13 +22,16 @@ def connectClient():
     print("[C]: got host by name: %s" %aSocket.gethostbyname(host))
     print("[C]: got host by addr: ", aSocket.gethostbyaddr(host))
 
+
     rsClientSocket.connect(rsSocketConnection)
     tsClientSocket.connect(tsSocketConnection)
 
     with open("PROJ1-HNS.txt", "r") as readFile:
         with open("RESOLVED.txt", "w") as writeFile:
             for hostName in readFile:
-                print("[C]: Hostname to look up: ", hostName)
+                # Stripping the new line at the end MIGHT mess with comparing strings but will need to be testes
+                print("[C]: Hostname to look up: ", hostName.rstrip())
+                # First contact to RS server
                 rsClientSocket.send("Search HOSTNAME".encode('utf-8'))
                 tsClientSocket.send("Search HOSTNAME".encode('utf-8'))
 

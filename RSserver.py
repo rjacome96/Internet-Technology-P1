@@ -25,9 +25,9 @@ def RSserver():
 
     while True:
 
-        print("[RS]: Request found: ", clientSocket.recv(1024).decode('utf-8'))
         clientSocket.send("RS Server here".encode('utf-8'))
         dataFromClient = clientSocket.recv(1024).decode('utf-8')
+        print("[RS]: Request found: ", dataFromClient)
         if not dataFromClient:
             break
     
