@@ -3,15 +3,15 @@ import socket as aSocket
 
 def RSserver():
 
-    dictionary = {}
+    rs_Dict = {}
 
-    dictionary["HostName"] = ("123.4.2", "A")
+    rs_Dict["HostName"] = ("123.4.2", "A")
     
-    print(dictionary)
-    print(dictionary["HostName"])
-    print(dictionary["HostName"][0])
-    print(dictionary["HostName"][1])
-    dictionary.clear()
+    print(rs_Dict)
+    print(rs_Dict["HostName"])
+    print(rs_Dict["HostName"][0])
+    print(rs_Dict["HostName"][1])
+    rs_Dict.clear()
 
     try:
         socketServer = aSocket.socket(aSocket.AF_INET, aSocket.SOCK_STREAM)
@@ -27,20 +27,19 @@ def RSserver():
             print("[RS]: line as String: ", recordString)
             hostName = recordString[0]
             ipAddress = recordString[1]
-            flag = recordString[2]
+            flag = recordString[2].rstrip()
             print("[RS]: Hostname: ", hostName)
             print("[RS]: IPAddress: ", ipAddress)
             print("[RS]: Flag: ", flag)
             print()
 
-            dictionary[hostName] = (ipAddress, flag)
-            print(dictionary)
+            rs_Dict[hostName] = (ipAddress, flag)
+            print(rs_Dict)
             
 
-    print("Key is: e.yahoo.com, Value is: ", dictionary["e.yahoo.com"])
-    print("Get the specific values: ", dictionary["e.yahoo.com"][0])
-    print(dictionary["e.yahoo.com"][1])
-    exit()
+    print("Key is: e.yahoo.com, Value is: ", rs_Dict["e.yahoo.com"])
+    print("Get the specific values: ", rs_Dict["e.yahoo.com"][0])
+    print(rs_Dict["e.yahoo.com"][1])
 
     port = 6000
     serverBinding = ('', port)
@@ -52,21 +51,23 @@ def RSserver():
     clientSocket, addr = socketServer.accept()
 
     while True:
-
-        clientSocket.send("RS Server here".encode('utf-8'))
-        dataFromClient = clientSocket.recv(1024).decode('utf-8')
-        print("[RS]: Request found: ", dataFromClient)
-        if not dataFromClient:
-            break
-        """
-        if clientReq in ts_table:
-            entry = TS_table(clientReq)
-        else:
-            entry = "hname" + "Error: Host not found"
         
-        ctsd.send(entry)
-        break
-        """
+        givenHost = clientSocket.recv(1024).decode('utf-8')
+        print("[RS]: Client request: ", givenHost)
+        if not givenHost:
+            break
+
+        if givenHost in rs_Dict:
+            dataToClient = rs_Dict[givenHost][1]
+            clientSocket.send(dataToClient.encode('utf-8'))
+            dataToClient = rs_Dict[givenHost][0]
+        else:
+            #Redirect to TS Server
+            dataToClient = "NS"
+            clientSocket.send(dataToClient.encode('utf-8'))
+            dataToClient = "ilab2.cs.rutgers.edu"
+        
+        clientSocket.send(dataToClient.encode('utf-8'))
     
 
     socketServer.close()
