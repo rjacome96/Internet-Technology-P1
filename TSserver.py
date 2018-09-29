@@ -3,16 +3,35 @@ import socket as tsSoc
 
 def TSserver():
 
+    # Attempt to create a socket for the server
     try:
         socketServer = tsSoc.socket(tsSoc.AF_INET, tsSoc.SOCK_STREAM)
         print("[TS]: socket server created")
     except tsSoc.error as err:
         print('{} \n'.format("socket open error ", err))
 
-    with open("PROJ1-DNSTS.txt", "r") as dnsTabelFile:
-        for fieldLine in dnsTabelFile:
+    # Create Dictionary data structure
+    ts_Dict = {}
+    # Open file to read DNS string
+    with open("PROJ1-DNSTS.txt", "r") as dnsTableFile:
+        # Populate Dict data structure with hostname as key
+        # And IP address and flags as values
+        for fieldLine in dnsTableFile:
             dictKey = fieldLine.rstrip()
-            print("[TS]: Fieldline: ", fieldLine)
+            print("[TS]: File line: ", dictKey)
+            recordString = dictKey.rsplit()
+            print("[TS]: line as String: ", recordString)
+            hostName = recordString[0]
+            ipAddress = recordString[1]
+            flag = recordString[2].rstrip()
+            print("[TS]: Hostname: ", hostName)
+            print("[TS]: IPAddress: ", ipAddress)
+            print("[TS]: Flag: ", flag)
+            print()
+
+            # Key is host name, value is a tuple of IP address and flag
+            ts_Dict[hostName] = (ipAddress, flag)
+            print(ts_Dict)
     
     # determine local hostname, IP address , select a port number
     host = tsSoc.gethostname()
@@ -39,23 +58,29 @@ def TSserver():
 
     while True:
 
-        clientSocket.send("TSserver here".encode('utf-8'))
         # Receive data that client is sending over
-        clientReq = clientSocket.recv(1024).decode('utf-8')
-        if not clientReq:
-            break
-        print("[TS]: Request received: ", clientReq)
+        givenHost = clientSocket.recv(1024).decode('utf-8')
 
-        
-        """
-        if clientReq in ts_table:
-            entry = TS_table(clientReq)
+        # If no data given, server can quit running
+        if not givenHost:
+            break
+        print("[TS]: Client request: ", givenHost)
+
+        # Set variable
+        dataToClient = None
+
+        # Determine if host is in the DNS table
+        if givenHost in ts_Dict:
+            print("[TS]: Host found")
+            flag = ts_Dict[givenHost][1]
+            ipAddress = ts_Dict[givenHost][0]
+            dataToClient = givenHost + " " + ipAddress + " " + flag
         else:
-            entry = "hname" + "Error: Host not found"
-        
-        ctsd.send(entry)
-        break
-        """
+            print("[TS]: Host not found. ERROR")
+            dataToClient = givenHost + " Error: Host not found"
+
+        clientSocket.send(dataToClient.encode('utf-8'))
+
     print("[TS]: clientSocket is: %s" %clientSocket)
     print("[TS]: addr is: ", addr)
 

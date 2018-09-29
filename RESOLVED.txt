@@ -1,0 +1,3 @@
+e.yahoo.com 128.48.35.6 A
+x.google.edu 19.2.3.8 A
+I.Dont.Exist Error: Host not found

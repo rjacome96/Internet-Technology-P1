@@ -24,7 +24,7 @@ def connectClient():
 
 
     rsClientSocket.connect(rsSocketConnection)
-    #tsClientSocket.connect(tsSocketConnection)
+    tsClientSocket.connect(tsSocketConnection)
 
     with open("PROJ1-HNS.txt", "r") as readFile:
         with open("RESOLVED.txt", "w") as writeFile:
@@ -35,11 +35,13 @@ def connectClient():
                 print("[C]: Hostname to look up: ", hostName)
                 # First contact to RS server
                 rsClientSocket.send(hostName.encode('utf-8'))
-                #tsClientSocket.send("Search HOSTNAME".encode('utf-8'))
                 print()
 
                 flag = rsClientSocket.recv(1024).decode('utf-8')
                 print("[C]: Flag received: ", flag)
+
+                # Set variable to write to file
+                result = None
 
                 if flag == "A":
                     print()
@@ -47,19 +49,24 @@ def connectClient():
                     print("[C]: Host name: ", hostName)
                     print("[C]: IP address: ", ipAddress)
                     print("[C] Flag: ", flag)
+                    result = hostName + " " + ipAddress + " " + flag
+                    print("[C]: Result from RS server ", result)
                 elif flag == "NS":
                     print()
                     serverName = rsClientSocket.recv(1024).decode('utf-8')
                     print("[C]: Gotta connect to:", serverName)
                     print("[C]: Host name: ", hostName)
                     print("[C]: Got flag: ", flag)
+                    tsClientSocket.send(hostName.encode('utf-8'))
+                    result = tsClientSocket.recv(1024).decode('utf-8')
+                    print("[C]: Result of TS server: ", result)
 
-                #print("[C]: Message received: ", tsClientSocket.recv(1024).decode('utf-8'))
+                writeFile.write(result + "\n")
 
 
-    #tsClientSocket.shutdown(aSocket.SHUT_RDWR)
+    tsClientSocket.shutdown(aSocket.SHUT_RDWR)
     rsClientSocket.shutdown(aSocket.SHUT_RDWR)
-    #tsClientSocket.close()
+    tsClientSocket.close()
     rsClientSocket.close()
 
 
