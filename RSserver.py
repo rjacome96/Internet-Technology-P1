@@ -10,6 +10,8 @@ def RSserver():
     except aSocket.error as err:
         print('{}\n'.format("Socket open error ", err))
 
+    # We will find the server's host name when we come across 'NS' in the file
+    serverToConnect = None
     # Create Dictionary data structure as DNS table
     rs_Dict = {}
     # Read lines from file
@@ -18,25 +20,26 @@ def RSserver():
         # And IP address and flags as values
         for fieldLine in dnsTableFile:
             dictKey = fieldLine.rstrip()
-            print("[RS]: File line: ", dictKey)
+            #print("[RS]: File line: ", dictKey)
             recordString = dictKey.rsplit()
-            print("[RS]: line as String: ", recordString)
+            #print("[RS]: line as String: ", recordString)
+
+            # From a given line in file, store host name, IP address, and flag respectively
             hostName = recordString[0]
             ipAddress = recordString[1]
             flag = recordString[2].rstrip()
-            print("[RS]: Hostname: ", hostName)
-            print("[RS]: IPAddress: ", ipAddress)
-            print("[RS]: Flag: ", flag)
-            print()
+
+            if flag == "NS":
+                # Found the server that will redirect us later to TS server
+                serverToConnect = hostName
+            #print("[RS]: Hostname: ", hostName)
+            #print("[RS]: IPAddress: ", ipAddress)
+            #print("[RS]: Flag: ", flag)
+            #print()
 
             # Key is host name, value is a tuple of IP address and flag
             rs_Dict[hostName] = (ipAddress, flag)
-            print(rs_Dict)
-            
-
-    print("Key is: e.yahoo.com, Value is: ", rs_Dict["e.yahoo.com"])
-    print("Get the specific values: ", rs_Dict["e.yahoo.com"][0])
-    print(rs_Dict["e.yahoo.com"][1])
+            #print(rs_Dict)
 
     # Pick port and bind it to this machine's IP address
     port = 6000
@@ -66,19 +69,14 @@ def RSserver():
         # Host name is in RS server's DNS table
         if givenHost in rs_Dict:
             print("[RS]: Host found")
-            dataToClient = rs_Dict[givenHost][1]
-            clientSocket.send(dataToClient.encode('utf-8'))
-            dataToClient = rs_Dict[givenHost][0]
+            flag = rs_Dict[givenHost][1]
+            dataToClient = givenHost + " " + rs_Dict[givenHost][0] + " " + flag
         else:
             print("[RS]: Host not found. Redirect to TS")
-            #Redirect to TS Server
-            # Hardcoding this is probably the wrong way to go about this
-            #But I have no idea how to search the Dict by value to get the NS value which would give us the 
-            #ilab hostname key
-            dataToClient = "NS"
-            clientSocket.send(dataToClient.encode('utf-8'))
-            dataToClient = "ilab2.cs.rutgers.edu"
+            flag = "NS"
+            dataToClient = serverToConnect + " - " + flag
         
+        print("[RS]: Sending hostname to client: ", dataToClient)
         clientSocket.send(dataToClient.encode('utf-8'))
     
 

@@ -10,58 +10,69 @@ def connectClient():
     except aSocket.error as err:
         print('{} \n'.format("Socket open error ", err))
 
-    tsPort = 5000
-    myAddr = aSocket.gethostbyname(aSocket.gethostname())
-    tsSocketConnection = (myAddr, tsPort)
-
-    rsPort = 6000
-    rsSocketConnection = (myAddr, rsPort)
-
+    """
     host = aSocket.gethostname()
     print("[C]: got host name: %s" %host)
     print("[C]: got host by name: %s" %aSocket.gethostbyname(host))
     print("[C]: got host by addr: ", aSocket.gethostbyaddr(host))
+    """
 
+    rsPort = 6000
+    rsHostName = input("[C]: Enter address of RS server: ")
+    rsAddr = aSocket.gethostbyname(rsHostName)
+    rsSocketConnection = (rsAddr, rsPort)
 
     rsClientSocket.connect(rsSocketConnection)
-    tsClientSocket.connect(tsSocketConnection)
+    serverConnected = False
 
     with open("PROJ1-HNS.txt", "r") as readFile:
         with open("RESOLVED.txt", "w") as writeFile:
             for hostName in readFile:
-                hostName = hostName.rstrip()
                 # Stripping the new line at the end MIGHT mess with comparing strings but will need to be tested
-                print()
-                print("[C]: Hostname to look up: ", hostName)
+                hostName = hostName.rstrip()
+                #print()
+                #print("[C]: Hostname to look up: ", hostName)
                 # First contact to RS server
                 rsClientSocket.send(hostName.encode('utf-8'))
-                print()
+                #print()
 
-                flag = rsClientSocket.recv(1024).decode('utf-8')
-                print("[C]: Flag received: ", flag)
+                # Get resulting String from server
+                serverResult = rsClientSocket.recv(1024).decode('utf-8')
 
+                # Split the strings into 3 parts (HostName, IPaddress, Flag)
+                result = serverResult.split()
+
+                # Select the flag
+                flag = result[2].rstrip()
+                #print ("[C]: Flag is: ", flag)
+                
                 # Set variable to write to file
-                result = None
 
                 if flag == "A":
                     print()
-                    ipAddress = rsClientSocket.recv(1024).decode('utf-8')
-                    print("[C]: Host name: ", hostName)
-                    print("[C]: IP address: ", ipAddress)
-                    print("[C] Flag: ", flag)
-                    result = hostName + " " + ipAddress + " " + flag
-                    print("[C]: Result from RS server ", result)
+                    print("[C]: Result from RS server ", serverResult)
                 elif flag == "NS":
                     print()
-                    serverName = rsClientSocket.recv(1024).decode('utf-8')
-                    print("[C]: Gotta connect to:", serverName)
-                    print("[C]: Host name: ", hostName)
-                    print("[C]: Got flag: ", flag)
-                    tsClientSocket.send(hostName.encode('utf-8'))
-                    result = tsClientSocket.recv(1024).decode('utf-8')
-                    print("[C]: Result of TS server: ", result)
+                    serverName = result[0]
+                    #print("[C]: Gotta connect to:", serverName)
+                    #print("[C]: Host name: ", hostName)
+                    #print("[C]: Got flag: ", flag)
 
-                writeFile.write(result + "\n")
+                    if not serverConnected:
+                        tsPort = 5000
+                        #tsAddr = aSocket.gethostbyname(serverName)
+                        # THE COMMENTED OUT LINE ABOVE SHOULD BE UNCOMMENTED IN THE END AND THE BOTTOM LINE DELETED
+                        tsAddr = aSocket.gethostbyname(aSocket.gethostname())
+                        tsSocketConnection = (tsAddr, tsPort)
+                        tsClientSocket.connect(tsSocketConnection)
+                        #print("[C]: Connected to TS server")
+                        serverConnected = True
+                         
+                    tsClientSocket.send(hostName.encode('utf-8'))
+                    serverResult = tsClientSocket.recv(1024).decode('utf-8')
+                    print("[C]: Result from TS server: ", serverResult)
+
+                writeFile.write(serverResult + "\n")
 
 
     tsClientSocket.shutdown(aSocket.SHUT_RDWR)

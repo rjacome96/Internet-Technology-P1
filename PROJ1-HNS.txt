@@ -1,3 +1,4 @@
-e.yahoo.com
-x.google.edu
-I.Dont.Exist
+mx.rutgers.com
+kill.cs.rutgers.edu
+www.ibm.edu
+www.google.com
