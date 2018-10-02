@@ -60,9 +60,9 @@ def connectClient():
 
                     if not serverConnected:
                         tsPort = 5000
-                        #tsAddr = aSocket.gethostbyname(serverName)
+                        tsAddr = aSocket.gethostbyname(serverName)
                         # THE COMMENTED OUT LINE ABOVE SHOULD BE UNCOMMENTED IN THE END AND THE BOTTOM LINE DELETED
-                        tsAddr = aSocket.gethostbyname(aSocket.gethostname())
+                        #tsAddr = aSocket.gethostbyname(aSocket.gethostname())
                         tsSocketConnection = (tsAddr, tsPort)
                         tsClientSocket.connect(tsSocketConnection)
                         #print("[C]: Connected to TS server")
