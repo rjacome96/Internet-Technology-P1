@@ -6,6 +6,8 @@ October 15, 2018
 Professor Badri Nath
 Roy Jacome & Kishan Patel
 
+NOTE: The environment used to build the python code is Python 3.6. Whenever ran, we would use the python command: python3 <file.py>. Using this command we are able to run the programs of each file.
+
 Client connects to RS server to look up host name. If found, return, host name, ipaddress and flag as a string. Else, RS server tells client to redirect to TS server by giving TS's host name. Client connects to TS server. If host name found, return the host name, ipaddress, flag as a string. Else, return error message.
 
 As of this point, the code has been tested against different machines (personal and ilab) and the programs run to completion as well as outputting the correct solution from the given test files.
