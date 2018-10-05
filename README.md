@@ -6,7 +6,9 @@ October 15, 2018
 Professor Badri Nath
 Roy Jacome & Kishan Patel
 
-Client connects to RS server to look up host name. If found, return, host name, ipaddress and flag as a string. Else, RS server tells client to redirect to TS server by giving TS's host name. Client connects to TS server. If host name found, return the host name, ipaddress, flag as a string. Else, return error message.
+How to connect the client to servers: In order for client to run, please give the host name (or IP address) of the machine that the RS server is running on. Similarly, for whatever machine the TS server is running on, please make sure to include the host name of the machine running the TS server inside RS's DNS table (the .txt file RS reads from to populate its DNS table).
+
+Client connects to RS server to look up host name. If found, return, host name, ipaddress and flag as a string. Else, RS server tells client to redirect to TS server by giving TS's host name. Client connects to TS server. If host name found, return the host name, ipaddress,flag as a string. Else, return error message.
 
 As of this point, the code has been tested against different machines (personal and ilab) and the programs run to completion as well as outputting the correct solution from the given test files.
 
@@ -19,4 +21,3 @@ Servers will run as long as the client needs them for. When the client disconnec
 NOTE: As mentioned above, the client will not connect to the TS server until the RS server redirects the client to do so. Once the client connects to the TS server until the entirety of the client's program. Thus, client does its best to simulate going from one server to the other but once connected to a server, it stays connected until the end.
 
 NOTE: All files/programs assume that there will ONLY be two servers that the client will connect to. Client only creates two sockets. We also assume that the RS server will only be given ONE "NS" flagged entry (which is presumably the TS server's host name) as it saves its name in the beginning while storing the fields into its data structure.
-
