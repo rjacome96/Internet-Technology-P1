@@ -2,8 +2,11 @@
 Create a DNS between two servers and a client.
 
 Project 1
+
 October 15, 2018
+
 Professor Badri Nath
+
 Roy Jacome & Kishan Patel
 
 NOTE: The environment used to build the python code is Python 3.6. Whenever ran, we would use the python command: python3 <file.py>. Using this command we are able to run the programs of each file.
