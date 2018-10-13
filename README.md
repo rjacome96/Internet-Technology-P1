@@ -11,6 +11,8 @@ Roy Jacome & Kishan Patel
 
 How to connect the client to servers: In order for client to run, please give the host name (or IP address) of the machine that the RS server is running on. Similarly, for whatever machine the TS server is running on, please make sure to include the host name of the machine running the TS server inside RS's DNS table (the .txt file RS reads from to populate its DNS table).
 
+Note: The host machine we used to run our machine on is ilab.cs.rutgers.edu
+
 NOTE: The environment used to build the python code is Python 3.6. Whenever ran, we would use the python command: python3 <file.py>. Using this command we are able to run the programs of each file.
 
 Client connects to RS server to look up host name. If found, return, host name, IP address and flag as a string. Else, RS server tells client to redirect to TS server by giving TS's host name. Client connects to TS server. If host name found, return the host name, ipaddress,flag as a string. Else, return error message.
