@@ -18,7 +18,7 @@ def connectClient():
     """
 
     rsPort = 6000
-    rsHostName = input("[C]: Enter address of RS server: ")
+    rsHostName = "grep.cs.rutgers.edu"
     rsAddr = aSocket.gethostbyname(rsHostName)
     rsSocketConnection = (rsAddr, rsPort)
 
