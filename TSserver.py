@@ -1,4 +1,3 @@
-
 import socket as tsSoc
 
 def TSserver():
@@ -69,7 +68,7 @@ def TSserver():
             dataToClient = givenHost + " " + ipAddress + " " + flag
         else:
             print("[TS]: Host not found. ERROR")
-            dataToClient = givenHost + " Error: Host not found"
+            dataToClient = givenHost + " - Error:HOST NOT FOUND"
 
         clientSocket.send(dataToClient.encode('utf-8'))
 

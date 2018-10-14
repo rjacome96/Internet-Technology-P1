@@ -9,9 +9,9 @@ Professor Badri Nath
 
 Roy Jacome & Kishan Patel
 
-How to connect the client to servers: In order for client to run, please give the host name (or IP address) of the machine that the RS server is running on. Similarly, for whatever machine the TS server is running on, please make sure to include the host name of the machine running the TS server inside RS's DNS table (the .txt file RS reads from to populate its DNS table).
+How to connect the client to servers: Client assumes that RS server is on the same machine/host that the Client is running on. The TS server on the other hand should run on the host grep.cs.rutgers.edu
 
-Note: The host machine we used to run our machine on is ilab.cs.rutgers.edu
+NOTE: The TS host machine we use to run our code on is grep.cs.rutgers.edu
 
 NOTE: The environment used to build the python code is Python 3.6. Whenever ran, we would use the python command: python3 <file.py>. Using this command we are able to run the programs of each file.
 
@@ -23,8 +23,8 @@ Both servers (RS and TS) loop through their respective files (DNS tables) and st
 
 Client will first connect to RS server to ask for the host names. When RS server does not find the host name in its data structure, it uses the other server's host name to send back to the client. Once client receives the "NS" flag, it will check if this is the first time it connects to the TS server with a boolean value. If it already did, do not connect again, else connect to the server and stay connected.
 
-Servers will run as long as the client needs them for. When the client disconnects, the servers disconnect as well becasue they assume client is finished. This design is also design so that servers will close their sockets properly even when client crashes.
+Servers will run as long as the client needs them for. When the client disconnects, the servers disconnect as well becasue they assume client is finished. This is designed so that servers will close their sockets properly even when client crashes. (This helps us to quickly test our code again without needing to wait for the ports/sockets to finish closing)
 
-NOTE: As mentioned above, the client will not connect to the TS server until the RS server redirects the client to do so. Once the client connects to the TS server until the entirety of the client's program. Thus, client does its best to simulate going from one server to the other but once connected to a server, it stays connected until the end.
+NOTE: As mentioned above, the client will not connect to the TS server until the RS server redirects the client to do so. Once the client connects to the TS server, it will stay connected until the entirety of the client's program. Thus, client does its best to simulate going from one server to the other but once connected to a server, it stays connected until the end.
 
-NOTE: All files/programs assume that there will ONLY be two servers that the client will connect to. Client only creates two sockets. We also assume that the RS server will only be given ONE "NS" flagged entry (which is presumably the TS server's host name) as it saves its name in the beginning while storing the fields into its data structure.
+NOTE: All files/programs assume that there will ONLY be two servers that the client will connect to. Client only creates two sockets. We also assume that the RS server will only be given ONE "NS" flagged entry (which is presumably the TS server's host name) as it saves its name in the beginning while storing the fields into its data structure. Client also assumes RS server is running on the same machine as the client so it connects to the local host.

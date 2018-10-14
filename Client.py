@@ -1,4 +1,3 @@
-
 import socket as aSocket
 
 def connectClient():
@@ -18,7 +17,7 @@ def connectClient():
     """
 
     rsPort = 6000
-    rsHostName = input("[C]: Enter address of RS server: ")
+    rsHostName = ""
     rsAddr = aSocket.gethostbyname(rsHostName)
     rsSocketConnection = (rsAddr, rsPort)
 
